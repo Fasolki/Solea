@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products - Soléa</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Button Styles */
+    .button-style {
+      background-color: #c87f4c;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Dropdown Content */
+    .dropdown-content, .filter-dropdown {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
+      position: absolute;
+      background-color: #fff6e9;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 5px;
+      margin-top: 0.5rem;
+      padding: 0 1rem;
+      z-index: 100;
+    }
+
+    .dropdown-content a, .filter-dropdown button {
+      display: block;
+      padding: 0.8rem 0;
+      color: #964b00;
+      text-decoration: none;
+      font-size: 1rem;
+      background: none;
+      border: none;
+      text-align: left;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .dropdown-content a:hover, .filter-dropdown button:hover {
+      color: #c87f4c;
+    }
+
+    .dropdown.open .dropdown-content,
+    .filter-menu.open .filter-dropdown {
+      max-height: 500px;
+      opacity: 1;
+      padding: 1rem;
+    }
+
+    .dropdown, .filter-menu {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Active Filter Bar */
+    #filterBar {
+      display: none;
+      padding: 0.5rem;
+      background-color: #fff6e9;
+      border-bottom: 2px solid #c87f4c;
+      text-align: center;
+    }
+
+    .filter-badge {
+      display: inline-block;
+      background-color: #c87f4c;
+      color: white;
+      border-radius: 20px;
+      padding: 5px 10px;
+      margin: 5px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .filter-badge b {
+      margin-left: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <a href="index.html"><h1>SOLÉA</h1></a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
+
+  <!-- Secondary Navigation Bar -->
+  <div style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem; background-color: #fff6e9; border-bottom: 2px solid #c87f4c;">
+    <div style="display: flex; gap: 2rem;">
+      <div class="dropdown" id="mensDropdown">
+        <button class="button-style" onclick="toggleDropdown('mensDropdown')">Men's</button>
+        <div class="dropdown-content">
+          <a href="#" onclick="filterClicked('mens')">All Men's</a>
+          <a href="#" onclick="filterClicked(['mens', 'shorts'])">Shorts</a>
+          <a href="#" onclick="filterClicked(['mens', 'pants'])">Pants</a>
+          <a href="#" onclick="filterClicked(['mens', 't-shirt'])">T-Shirts</a>
+          <a href="#" onclick="filterClicked(['mens', 'buttons'])">Buttons</a>
+        </div>
+      </div>
+
+      <div class="dropdown" id="womensDropdown">
+        <button class="button-style" onclick="toggleDropdown('womensDropdown')">Women's</button>
+        <div class="dropdown-content">
+          <a href="#" onclick="filterClicked('womens')">All Women's</a>
+          <a href="#" onclick="filterClicked(['womens', 'bikini'])">Bikini</a>
+          <a href="#" onclick="filterClicked(['womens', 'shorts'])">Shorts</a>
+          <a href="#" onclick="filterClicked(['womens', 'pants'])">Pants</a>
+          <a href="#" onclick="filterClicked(['womens', 't-shirt'])">T-Shirts</a>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex-grow: 1; text-align: center;">
+      <marquee style="color: #964b00; font-weight: bold;">Use code SUNSHINE10 for 10% off!</marquee>
+    </div>
+
+    <div class="filter-menu" id="filterMenu">
+      <button class="button-style" onclick="toggleDropdown('filterMenu')">Filter</button>
+      <div class="filter-dropdown">
+        <button onclick="sortProducts('price-asc')">Price: Low to High</button>
+        <button onclick="sortProducts('price-desc')">Price: High to Low</button>
+        <button onclick="sortProducts('newest')">Newest</button>
+        <button onclick="sortProducts('oldest')">Oldest</button>
+        <button onclick="sortProducts('name-asc')">Name A-Z</button>
+        <button onclick="sortProducts('name-desc')">Name Z-A</button>
+      </div>
+    </div>
+  </div>
+
+    <!-- Filter Bar -->
+    <div id="filterBar">
+        <button id="clearFiltersBtn" class="button-style" style="margin-bottom: 10px;">Clear All Filters</button>
+    </div>
+
+
+
+
+    <!-- Products Grid -->
+    <section class="products" id="productsGrid">
+        <!-- Men's T-Shirts -->
+        <div class="product show" data-id="product1" data-tags="mens t-shirt" data-price="29.99" data-date="2025-05-10">
+            <a href="product.html?id=product1">
+                <img src="sand.png" alt="Men's Beach Tee" />
+            </a>
+            <div class="info">
+                <h4>Men's Beach Tee</h4>
+                <p>$29.99</p>
+                <button class="button-style" onclick="addToCart(this)" 
+                    data-id="product1" 
+                    data-name="Men's Beach Tee" 
+                    data-price="29.99" 
+                    data-image="sand.png">Add to Cart</button>
+            </div>
+        </div>
+        <div class="product show" data-id="product2" data-tags="mens t-shirt" data-price="34.99" data-date="2025-04-12">
+            <a href="product.html?id=product2">
+                <img src="product2.jpg" alt="Men's Cool Tee" />
+            </a>
+            <div class="info">
+                <h4>Men's Cool Tee</h4>
+                <p>$34.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product2"
+                    data-name="Men's Cool Tee"
+                    data-price="34.99"
+                    data-image="product2.jpg">  Add to Cart </button>
+
+            </div>
+        </div>
+        <div class="product show" data-id="product3" data-tags="mens t-shirt" data-price="39.99" data-date="2025-03-20">
+            <a href="product.html?id=product3">
+                <img src="product3.jpg" alt="Men's Graphic Tee" />
+            </a>
+            <div class="info">
+                <h4>Men's Graphic Tee</h4>
+                <p>$39.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product3"
+                    data-name="Men's Graphic Tee"
+                    data-price="39.99"
+                    data-image="product3.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product4" data-tags="mens t-shirt" data-price="24.99" data-date="2025-02-15">
+            <a href="product.html?id=product4">
+                <img src="product4.jpg" alt="Men's Plain Tee" />
+            </a>
+            <div class="info">
+                <h4>Men's Plain Tee</h4>
+                <p>$24.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product4"
+                    data-name="Men's Plain Tee"
+                    data-price="24.99"
+                    data-image="product4.jpg"> Add to Cart </button>
+            </div>
+        </div>
+
+        <!-- Women's Bikini -->
+        <div class="product show" data-id="product5" data-tags="womens bikini" data-price="49.99" data-date="2025-05-01">
+            <a href="product.html?id=product5">
+                <img src="product5.jpg" alt="Classic Bikini" />
+            </a>
+            <div class="info">
+                <h4>Classic Bikini</h4>
+                <p>$49.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product5"
+                    data-name="Classic Bikini"
+                    data-price="49.99"
+                    data-image="product5.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product6" data-tags="womens bikini" data-price="59.99" data-date="2025-04-05">
+            <a href="product.html?id=product6">
+                <img src="product6.jpg" alt="Tropical Bikini" />
+            </a>
+            <div class="info">
+                <h4>Tropical Bikini</h4>
+                <p>$59.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product6"
+                    data-name="Tropical Bikini"
+                    data-price="59.99"
+                    data-image="product6.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product7" data-tags="womens bikini" data-price="54.99" data-date="2025-03-15">
+            <a href="product.html?id=product7">
+                <img src="product7.jpg" alt="High-Waist Bikini" />
+            </a>
+            <div class="info">
+                <h4>High-Waist Bikini</h4>
+                <p>$54.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product7"
+                    data-name="High-Waist Bikini"
+                    data-price="54.99"
+                    data-image="product7.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product8" data-tags="womens bikini" data-price="44.99" data-date="2025-02-28">
+            <a href="product.html?id=product8">
+                <img src="product8.jpg" alt="Minimalist Bikini" />
+            </a>
+            <div class="info">
+                <h4>Minimalist Bikini</h4>
+                <p>$44.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product8"
+                    data-name="Minimalist Bikini"
+                    data-price="44.99"
+                    data-image="product8.jpg"> Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Men's Shorts -->
+        <div class="product show" data-id="product9" data-tags="mens shorts" data-price="34.99" data-date="2025-05-12">
+            <a href="product.html?id=product9">
+                <img src="product9.jpg" alt="Men's Cargo Shorts" />
+            </a>
+            <div class="info">
+                <h4>Men's Cargo Shorts</h4>
+                <p>$34.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product9"
+                    data-name="Men's Cargo Shorts"
+                    data-price="34.99"
+                    data-image="product9.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product10" data-tags="mens shorts" data-price="29.99" data-date="2025-04-15">
+            <a href="product.html?id=product10">
+                <img src="product10.jpg" alt="Men's Beach Shorts" />
+            </a>
+            <div class="info">
+                <h4>Men's Beach Shorts</h4>
+                <p>$29.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product10"
+                    data-name="Men's Beach Shorts"
+                    data-price="29.99"
+                    data-image="product10.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product11" data-tags="mens shorts" data-price="39.99" data-date="2025-03-18">
+            <a href="product.html?id=product11">
+                <img src="product11.jpg" alt="Men's Sport Shorts" />
+            </a>
+            <div class="info">
+                <h4>Men's Sport Shorts</h4>
+                <p>$39.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product11"
+                    data-name="Men's Sport Shorts"
+                    data-price="39.99"
+                    data-image="product11.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product12" data-tags="mens shorts" data-price="27.99" data-date="2025-02-22">
+            <a href="product.html?id=product12">
+                <img src="product12.jpg" alt="Men's Linen Shorts" />
+            </a>
+            <div class="info">
+                <h4>Men's Linen Shorts</h4>
+                <p>$27.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product12"
+                    data-name="Men's Linen Shorts"
+                    data-price="27.99"
+                    data-image="product12.jpg"> Add to Cart </button>
+            </div>
+        </div>
+
+        <!-- Men's Pants -->
+        <div class="product show" data-id="product13" data-tags="mens pants" data-price="59.99" data-date="2025-05-08">
+            <a href="product.html?id=product13">
+                <img src="product13.jpg" alt="Men's Chino Pants" />
+            </a>
+            <div class="info">
+                <h4>Men's Chino Pants</h4>
+                <p>$59.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product13"
+                    data-name="Men's Chino Pants"
+                    data-price="59.99"
+                    data-image="product13.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product14" data-tags="mens pants" data-price="64.99" data-date="2025-04-18">
+            <a href="product.html?id=product14">
+                <img src="product14.jpg" alt="Men's Slim Jeans" />
+            </a>
+            <div class="info">
+                <h4>Men's Slim Jeans</h4>
+                <p>$64.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product14"
+                    data-name="Men's Slim Jeans"
+                    data-price="64.99"
+                    data-image="product14.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product15" data-tags="mens pants" data-price="54.99" data-date="2025-03-22">
+            <a href="product.html?id=product15">
+                <img src="product15.jpg" alt="Men's Jogger Pants" />
+            </a>
+            <div class="info">
+                <h4>Men's Jogger Pants</h4>
+                <p>$54.99</p>
+                <button class="button-style"onclick="addToCart(this)"
+                    data-id="product15"
+                    data-name="Men's Jogger Pants"
+                    data-price="54.99"
+                    data-image="product15.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product16" data-tags="mens pants" data-price="69.99" data-date="2025-02-25">
+            <a href="product.html?id=product16">
+                <img src="product16.jpg" alt="Men's Formal Trousers" />
+            </a>
+            <div class="info">
+                <h4>Men's Formal Trousers</h4>
+                <p>$69.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product16"
+                    data-name="Men's Formal Trousers"
+                    data-price="69.99"
+                    data-image="product16.jpg"> Add to Cart </button>
+            </div>
+        </div>
+
+        <!-- Men's Buttons -->
+        <div class="product show" data-id="product17" data-tags="mens buttons" data-price="49.99" data-date="2025-05-05">
+            <a href="product.html?id=product17">
+                <img src="product17.jpg" alt="Men's Linen Button Shirt" />
+            </a>
+            <div class="info">
+                <h4>Men's Linen Button Shirt</h4>
+                <p>$49.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product17"
+                    data-name="Men's Linen Button Shirt"
+                    data-price="49.99"
+                    data-image="product17.jpg"> Add to Cart </button>
+            </div>
+        </div>
+
+        <div class="product show" data-id="product18" data-tags="mens buttons" data-price="44.99" data-date="2025-04-08">
+            <a href="product.html?id=product18">
+                <img src="product18.jpg" alt="Men's Casual Button Shirt" />
+            </a>
+            <div class="info">
+                <h4>Men's Casual Button Shirt</h4>
+                <p>$44.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product18"
+                    data-name="Men's Casual Button Shirt"
+                    data-price="44.99"
+                    data-image="product18.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product19" data-tags="mens buttons" data-price="59.99" data-date="2025-03-10">
+            <a href="product.html?id=product19">
+                <img src="product19.jpg" alt="Men's Dress Button Shirt" />
+            </a>
+            <div class="info">
+                <h4>Men's Dress Button Shirt</h4>
+                <p>$59.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product19"
+                    data-name="Men's Dress Button Shirt"
+                    data-price="59.99"
+                    data-image="product19.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product20" data-tags="mens buttons" data-price="39.99" data-date="2025-02-18">
+            <a href="product.html?id=product20">
+                <img src="product20.jpg" alt="Men's Short Sleeve Button Shirt" />
+            </a>
+            <div class="info">
+                <h4>Men's Short Sleeve Button Shirt</h4>
+                <p>$39.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product20"
+                    data-name="Men's Short Sleeve Button Shirt"
+                    data-price="39.99"
+                    data-image="product20.jpg"> Add to Cart </button>
+            </div>
+        </div>
+
+        <!-- Women's Shorts -->
+        <div class="product show" data-id="product21" data-tags="womens shorts" data-price="34.99" data-date="2025-05-14">
+            <a href="product.html?id=product21">
+                <img src="product21.jpg" alt="Women's Denim Shorts" />
+            </a>
+            <div class="info">
+                <h4>Women's Denim Shorts</h4>
+                <p>$34.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product21"
+                    data-name="Women's Denim Shorts"
+                    data-price="34.99"
+                    data-image="product21.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product22" data-tags="womens shorts" data-price="29.99" data-date="2025-04-10">
+            <a href="product.html?id=product22">
+                <img src="product22.jpg" alt="Women's Linen Shorts" />
+            </a>
+            <div class="info">
+                <h4>Women's Linen Shorts</h4>
+                <p>$29.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product22"
+                    data-name="Women's Linen Shorts"
+                    data-price="29.99"
+                    data-image="product22.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product23" data-tags="womens shorts" data-price="44.99" data-date="2025-03-25">
+            <a href="product.html?id=product23">
+                <img src="product23.jpg" alt="Women's Sport Shorts" />
+            </a>
+            <div class="info">
+                <h4>Women's Sport Shorts</h4>
+                <p>$44.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product23"
+                    data-name="Women's Sport Shorts"
+                    data-price="44.99"
+                    data-image="product23.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product24" data-tags="womens shorts" data-price="39.99" data-date="2025-02-20">
+            <a href="product.html?id=product24">
+                <img src="product24.jpg" alt="Women's High-Waist Shorts" />
+            </a>
+            <div class="info">
+                <h4>Women's High-Waist Shorts</h4>
+                <p>$39.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product24"
+                    data-name="Women's High-Waist Shorts"
+                    data-price="39.99"
+                    data-image="product24.jpg"> Add to Cart </button>
+            </div>
+        </div>
+
+        <!-- Women's Pants -->
+        <div class="product show" data-id="product25" data-tags="womens pants" data-price="59.99" data-date="2025-05-03">
+            <a href="product.html?id=product25">
+                <img src="product25.jpg" alt="Women's Palazzo Pants" />
+            </a>
+            <div class="info">
+                <h4>Women's Palazzo Pants</h4>
+                <p>$59.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product25"
+                    data-name="Women's Palazzo Pants"
+                    data-price="59.99"
+                    data-image="product25.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product26" data-tags="womens pants" data-price="64.99" data-date="2025-04-07">
+            <a href="product.html?id=product26">
+                <img src="product26.jpg" alt="Women's Slim Trousers" />
+            </a>
+            <div class="info">
+                <h4>Women's Slim Trousers</h4>
+                <p>$64.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product26"
+                    data-name="Women's Slim Trousers"
+                    data-price="64.99"
+                    data-image="product26.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product27" data-tags="womens pants" data-price="54.99" data-date="2025-03-18">
+            <a href="product.html?id=product27">
+                <img src="product27.jpg" alt="Women's Wide-Leg Pants" />
+            </a>
+            <div class="info">
+                <h4>Women's Wide-Leg Pants</h4>
+                <p>$54.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product27"
+                    data-name="Women's Wide-Leg Pants"
+                    data-price="54.99"
+                    data-image="product27.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product28" data-tags="womens pants" data-price="69.99" data-date="2025-02-24">
+            <a href="product.html?id=product28">
+                <img src="product28.jpg" alt="Women's Formal Pants" />
+            </a>
+            <div class="info">
+                <h4>Women's Formal Pants</h4>
+                <p>$69.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product28"
+                    data-name="Women's Formal Pants"
+                    data-price="69.99"
+                    data-image="product28.jpg"> Add to Cart </button>
+            </div>
+        </div>
+
+        <!-- Women's T-Shirts -->
+        <div class="product show" data-id="product29" data-tags="womens t-shirt" data-price="29.99" data-date="2025-05-09">
+            <a href="product.html?id=product29">
+                <img src="product29.jpg" alt="Women's Basic Tee" />
+            </a>
+            <div class="info">
+                <h4>Women's Basic Tee</h4>
+                <p>$29.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product29"
+                    data-name="Women's Basic Tee"
+                    data-price="29.99"
+                    data-image="product29.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product30" data-tags="womens t-shirt" data-price="34.99" data-date="2025-04-14">
+            <a href="product.html?id=product30">
+                <img src="product30.jpg" alt="Women's Graphic Tee" />
+            </a>
+            <div class="info">
+                <h4>Women's Graphic Tee</h4>
+                <p>$34.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product30"
+                    data-name="Women's Graphic Tee"
+                    data-price="34.99"
+                    data-image="product30.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product31" data-tags="womens t-shirt" data-price="39.99" data-date="2025-03-22">
+            <a href="product.html?id=product31">
+                <img src="product31.jpg" alt="Women's Crop Tee" />
+            </a>
+            <div class="info">
+                <h4>Women's Crop Tee</h4>
+                <p>$39.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product31"
+                    data-name="Women's Crop Tee"
+                    data-price="39.99"
+                    data-image="product31.jpg"> Add to Cart </button>
+            </div>
+        </div>
+        <div class="product show" data-id="product32" data-tags="womens t-shirt" data-price="24.99" data-date="2025-02-26">
+            <a href="product.html?id=product32">
+                <img src="product32.jpg" alt="Women's Oversized Tee" />
+            </a>
+            <div class="info">
+                <h4>Women's Oversized Tee</h4>
+                <p>$24.99</p>
+                <button class="button-style" onclick="addToCart(this)"
+                    data-id="product32"
+                    data-name="Women's Oversized Tee"
+                    data-price="24.99"
+                    data-image="product32.jpg"> Add to Cart </button>
+            </div>
+        </div>
+    </section>
+
+    
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Soléa. All rights reserved.</p>
+  </footer>
+
+
+
+
+
+
+
+  
+  <!-- JavaScript -->
+  <script>
+    // Handle dropdown toggle
+    function toggleDropdown(id) {
+      const dropdown = document.getElementById(id);
+      dropdown.classList.toggle('open');
+    }
+  
+    // Filter and sort state
+    const activeFilters = new Set();       // Clothing tags (e.g., 'mens', 'shorts', etc.)
+    const activeSort = { type: null };     // Only one active sort (e.g., 'price-asc')
+    const filterBar = document.getElementById('filterBar');
+  
+    // Add a clothing filter (e.g., from Men’s or Women’s dropdown)
+    function addFilter(filter) {
+      if (!activeFilters.has(filter)) {
+        activeFilters.add(filter);
+        updateFilterBar();
+        filterProducts();
+      }
+    }
+  
+    // Remove a clothing or sort filter
+    function removeFilter(filter) {
+      if (activeFilters.has(filter)) {
+        activeFilters.delete(filter);
+      } else if (filter === activeSort.type) {
+        activeSort.type = null;
+      }
+      updateFilterBar();
+      filterProducts();
+    }
+  
+    // Update the filter bar display
+    function updateFilterBar() {
+      if (activeFilters.size === 0 && !activeSort.type) {
+        filterBar.style.display = 'none';
+        filterBar.innerHTML = '';
+        return;
+      }
+  
+      filterBar.style.display = 'flex';
+      filterBar.innerHTML = '';
+  
+      // Clear All Filters Button
+      const clearButton = document.createElement('button');
+      clearButton.className = 'button-style';
+      clearButton.style.marginRight = '20px';
+      clearButton.innerText = 'Clear All Filters';
+      clearButton.onclick = clearFilters;
+      filterBar.appendChild(clearButton);
+  
+      // Active clothing filters
+      activeFilters.forEach(filter => {
+        const badge = document.createElement('span');
+        badge.className = 'filter-badge';
+        badge.innerHTML = `${filter} <b>×</b>`;
+        badge.querySelector('b').onclick = () => removeFilter(filter);
+        filterBar.appendChild(badge);
+      });
+  
+      // Active sort filter (only one at a time)
+      if (activeSort.type) {
+        const badge = document.createElement('span');
+        badge.className = 'filter-badge';
+        badge.innerHTML = `${activeSort.type} <b>×</b>`;
+        badge.querySelector('b').onclick = () => removeFilter(activeSort.type);
+        filterBar.appendChild(badge);
+      }
+    }
+  
+    // Show/hide products based on active filters
+    function filterProducts() {
+      const products = document.querySelectorAll('.product');
+  
+      products.forEach(product => {
+        const tags = product.getAttribute('data-tags').split(' ');
+        const isVisible = [...activeFilters].every(filter => tags.includes(filter));
+        product.style.display = isVisible || activeFilters.size === 0 ? 'block' : 'none';
+      });
+  
+      if (activeSort.type) {
+        sortProductsLogic(activeSort.type);
+      }
+    }
+  
+    function filterClicked(tags) {
+    if (Array.isArray(tags)) {
+        tags.forEach(tag => addFilter(tag));
+    } else {
+        addFilter(tags);
+    }
+    }
+  
+    // Handle sorting
+    function sortProducts(type) {
+      activeSort.type = type;
+      updateFilterBar();
+      filterProducts();
+    }
+  
+    // Logic to sort products based on type
+    function sortProductsLogic(type) {
+      const grid = document.getElementById('productsGrid');
+      const products = Array.from(grid.children);
+  
+      let sorted;
+  
+      if (type === 'price-asc') {
+        sorted = products.sort((a, b) => +a.dataset.price - +b.dataset.price);
+      } else if (type === 'price-desc') {
+        sorted = products.sort((a, b) => +b.dataset.price - +a.dataset.price);
+      } else if (type === 'newest') {
+        sorted = products.sort((a, b) => new Date(b.dataset.date) - new Date(a.dataset.date));
+      } else if (type === 'oldest') {
+        sorted = products.sort((a, b) => new Date(a.dataset.date) - new Date(b.dataset.date));
+      } else if (type === 'name-asc') {
+        sorted = products.sort((a, b) => a.querySelector('h4').innerText.localeCompare(b.querySelector('h4').innerText));
+      } else if (type === 'name-desc') {
+        sorted = products.sort((a, b) => b.querySelector('h4').innerText.localeCompare(a.querySelector('h4').innerText));
+      }
+  
+      sorted.forEach(product => grid.appendChild(product));
+    }
+  
+    // Clear all filters (both clothing tags and sort)
+    function clearFilters() {
+      activeFilters.clear();
+      activeSort.type = null;
+      updateFilterBar();
+      filterProducts();
+    }
+  
+    // Close dropdowns when clicking outside
+    window.onclick = function(event) {
+      if (!event.target.matches('button')) {
+        document.querySelectorAll('.dropdown, .filter-menu').forEach(dropdown => {
+          dropdown.classList.remove('open');
+        });
+      }
+    }
+
+    //Add to cart
+    function addToCart(button) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    const id = button.getAttribute('data-id');
+    const name = button.getAttribute('data-name');
+    const price = parseFloat(button.getAttribute('data-price'));
+    const image = button.getAttribute('data-image');
+
+    const productInCart = cart.find(item => item.id === id);
+
+    if (productInCart) {
+        productInCart.quantity += 1;
+    } else {
+        cart.push({ id, name, price, image, quantity: 1 });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // Change the button text
+    button.innerText = "Added to Cart! ✅";
+    button.disabled = true;
+    }
+
+
+  </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
